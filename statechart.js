@@ -178,12 +178,8 @@
         }
         return enterClustered.call(this, states, opts);
       }
-      else if (this.history) {
-        next = this.__previous__ || this.substates[0];
-      }
-      else {
-        next = this.substates[0];
-      }
+      if (this.history) next = this.__previous__;
+      if (!next) next = this.substates[0];
     }
 
     if (cur && cur !== next) { exit.call(cur, opts); }
@@ -423,8 +419,7 @@
       }
     }
 
-    s = new State('__root__', opts);
-    if (f) { f.call(s); }
+    s = new State('__root__', opts, f);
     return s;
   };
 
@@ -565,7 +560,7 @@
     //
     // Returns the receiver.
     addSubstate: function(state) {
-      var deep = this.history && this.deep;
+      var deep = this.deep;
       this.substates.push(state);
       state.each(function(s) {
         s.__cache__ = {};
