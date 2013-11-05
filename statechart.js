@@ -27,7 +27,7 @@
 
   // Internal: Returns a boolean indicating whether there are multiple unique
   // values in the given array.
-  function multipleUniqs(array) {
+  function notUnique(array) {
     var x, i, n;
 
     if (!array || array.length === 0) { return false; }
@@ -162,7 +162,7 @@
       nexts.push(_path.call(states[i])[selflen]);
     }
 
-    if (multipleUniqs(nexts)) {
+    if (notUnique(nexts)) {
       throw new Error("State#enterClustered: attempted to enter multiple substates of " + this + ": " + nexts.join(', '));
     }
 
@@ -669,7 +669,7 @@
         pivots.push(findPivot.call(this, states[i]));
       }
 
-      if (multipleUniqs(pivots)) {
+      if (notUnique(pivots)) {
         throw new Error("State#goto: multiple pivot states found between state " + this + " and paths " + paths.join(', '));
       }
 
