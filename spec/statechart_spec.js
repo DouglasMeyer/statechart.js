@@ -87,17 +87,6 @@ describe('State#addSubstate', function() {
     expect(a.substates).toContain(c);
   });
 
-  it('should add the given state tot he subtateMap object', function() {
-    var a = new State('a'),
-        b = new State('b'),
-        c = new State('c');
-
-    a.addSubstate(b);
-    expect(a.substateMap).toEqual({b: b});
-    a.addSubstate(c);
-    expect(a.substateMap).toEqual({b: b, c: c});
-  });
-
   it('should set the superstate property of the given state', function() {
     var a = new State('a'),
         b = new State('b'),
@@ -594,7 +583,6 @@ describe('State#state', function() {
     var x = root.state('x');
     expect(x instanceof State).toBe(true);
     expect(root.substates).toContain(x);
-    expect(root.substateMap['x']).toBe(x);
   });
 
   it('should pass the options to the `Z.State` constructor', function() {
@@ -614,7 +602,6 @@ describe('State#state', function() {
       root.state(s);
 
       expect(root.substates).toContain(s);
-      expect(root.substateMap['s']).toBe(s);
       expect(s.superstate).toBe(root);
     });
   });

@@ -375,7 +375,6 @@
     }
 
     this.name          = name;
-    this.substateMap   = {};
     this.substates     = [];
     this.superstate    = null;
     this.enters        = [];
@@ -567,7 +566,6 @@
     // Returns the receiver.
     addSubstate: function(state) {
       var deep = this.history && this.deep;
-      this.substateMap[state.name] = state;
       this.substates.push(state);
       state.each(function(s) {
         s.__cache__ = {};
@@ -755,7 +753,7 @@
     // Returns the `State` object the path represents if it can be resolve and
     //   `null` otherwise.
     resolve: function(path) {
-      var head, next;
+      var head, next, i, n;
 
       if (!path) { return null; }
 
@@ -773,7 +771,9 @@
         next = this.superstate;
         break;
       default:
-        next = this.substateMap[head];
+        for (i = 0, n = this.substates.length; i < n; i++){
+          if (head === this.substates[i].name) { next = this.substates[i]; break; }
+        }
       }
 
       if (!next) { return null; }
