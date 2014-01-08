@@ -355,14 +355,10 @@
   // Returns nothing.
   // Throws `Error` if both the `concurrent` and `H` options are set.
   function State(name, opts, f) {
-    if (arguments.length === 2) {
-      if (typeof opts === 'function') {
-        f    = opts;
-        opts = {};
-      }
+    if (typeof opts === 'function') {
+      f    = opts;
+      opts = {};
     }
-
-    if (!(this instanceof State)) { return new State(name, opts, f); }
 
     opts = opts || {};
 
@@ -405,7 +401,7 @@
   //
   // Returns the newly created root state.
   State.define = function() {
-    var opts = {}, f = null, s;
+    var constructor = this, opts = {}, f = null, s;
 
     if (arguments.length === 2) {
       opts = arguments[0];
@@ -420,7 +416,7 @@
       }
     }
 
-    s = new State('__root__', opts, f);
+    s = new constructor('__root__', opts, f);
     return s;
   };
 
@@ -454,10 +450,14 @@
   //
   // Returns the newly created state.
   State.prototype.state = function(name, options, f) {
-      var s = name instanceof State ? name :
-        State.apply(null, slice.call(arguments));
-      this.addSubstate(s);
-      return s;
+    var constructor = this.constructor, s;
+    if (name instanceof constructor) {
+      s = name;
+    } else {
+      s = new constructor(name, options, f);
+    }
+    this.addSubstate(s);
+    return s;
   };
 
   // Public: Registers an enter handler to be called with the receiver state
